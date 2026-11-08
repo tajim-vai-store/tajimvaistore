@@ -8,6 +8,28 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    // Password Protection
+const PANEL_PASSWORD = "6251";
+
+function checkPanelPassword() {
+    const input = document.getElementById('panelPassword');
+    const error = document.getElementById('passError');
+    if (input.value === PANEL_PASSWORD) {
+        sessionStorage.setItem('panel_auth', 'true');
+        document.getElementById('passwordGate').style.display = 'none';
+    } else {
+        error.style.display = 'block';
+        input.value = '';
+        input.focus();
+    }
+}
+
+// Check on load
+window.addEventListener('DOMContentLoaded', function() {
+    if (sessionStorage.getItem('panel_auth') === 'true') {
+        document.getElementById('passwordGate').style.display = 'none';
+    }
+});
 <style>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -73,20 +95,16 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-cogs"></i> Control Panel</h1>
-            <a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> ওয়েবসাইট</a>
-        </div>
-        <div id="alertBox" class="alert"></div>
-
-        <!-- Tabs -->
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="showTab('products')">প্রোডাক্ট</button>
-            <button class="tab-btn" onclick="showTab('orders')">অর্ডার লিস্ট</button>
-            <button class="tab-btn" onclick="showTab('settings')">সেটিংস</button>
-            <button class="tab-btn" onclick="showTab('users')">ইউজার</button>
-        </div>
+    <!-- Password Gate -->
+<div id="passwordGate" style="display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:#f0f2f5;z-index:9999;align-items:center;justify-content:center;flex-direction:column;padding:20px;">
+    <div style="background:white;padding:30px 25px;border-radius:16px;width:100%;max-width:340px;box-shadow:0 8px 30px rgba(0,0,0,0.12);text-align:center;">
+        <h2 style="margin:0 0 8px;color:#1a237e;font-size:20px;">🔒 Control Panel</h2>
+        <p style="margin:0 0 20px;color:#666;font-size:14px;">পাসওয়ার্ড দিন</p>
+        <input type="password" id="panelPassword" placeholder="পাসওয়ার্ড লিখুন" style="width:100%;padding:14px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;margin-bottom:15px;outline:none;text-align:center;" onkeydown="if(event.key==='Enter')checkPanelPassword()">
+        <button onclick="checkPanelPassword()" style="width:100%;padding:14px;background:#ff6f00;color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;">প্রবেশ করুন</button>
+        <p id="passError" style="color:#c62828;font-size:13px;margin-top:12px;display:none;">ভুল পাসওয়ার্ড!</p>
+    </div>
+</div>
 
         <!-- PRODUCTS TAB -->
         <div id="tab-products">
